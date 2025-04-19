@@ -1,6 +1,19 @@
 import React from 'react'
+import axios from 'axios'
+import { useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom'
 
 const BookDetail = () => {
+    const { id } = useParams()
+    const [book, setBook] = useState(null)
+
+    useEffect(() => {
+        axios.get(`http://localhost:3000/api/books/${id}`)
+            .then(res => setBook(res.data[0]))
+            .catch(err => console.error(err))
+    }, [id])
+
+    if (!book) return <div className="text-center mt-10">Loading...</div>
     return (
         <div className='flex w-fit mx-auto gap-5'>
             <div className="stats stats-vertical shadow">
@@ -9,13 +22,11 @@ const BookDetail = () => {
                     <div className="stat-value">31K</div>
                     <div className="stat-desc">Jan 1st - Feb 1st</div>
                 </div>
-
                 <div className="stat">
                     <div className="stat-title">New Users</div>
                     <div className="stat-value">4,200</div>
                     <div className="stat-desc">↗︎ 400 (22%)</div>
                 </div>
-
                 <div className="stat">
                     <div className="stat-title">New Registers</div>
                     <div className="stat-value">1,200</div>
@@ -27,11 +38,11 @@ const BookDetail = () => {
                 <div className="card-body">
                     <span className="badge badge-xs badge-warning">Self Improvement</span>
                     <div>
-                        <h2 className="text-2xl font-bold">Atomic Habit</h2>
-                        <p>James Clear</p>
+                        <h2 className="text-2xl font-bold">{book.title}</h2>
+                        <p>{book.author}</p>
                     </div>
                     <div className='mt-3'>
-                        <p className='opacity-70'>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officia amet rem deserunt. Numquam dolores quod explicabo vero! Consectetur, consequatur repellat.</p>
+                        <p className='opacity-70'>{book.description}</p>
                     </div>
                     <div className="mt-6 flex flex-col gap-2">
                         <button className="btn btn-outline btn-warning btn-block font-extrabold">Edit Book</button>
@@ -41,6 +52,7 @@ const BookDetail = () => {
             </div>
         </div>
     )
+
 }
 
 export default BookDetail
