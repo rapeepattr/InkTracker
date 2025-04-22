@@ -12,14 +12,26 @@ const Home = () => {
 
     return (
         <div>
-            <div className="flex mx-auto stats shadow">
+            <div className="flex mx-auto stats border border-base-300">
+                <div className="stat">
+                    <div className="stat-title">Total Page Views</div>
+                    <div className="stat-value">8,251</div>
+                    <div className="stat-desc">21% more than last month</div>
+                </div>
+
+                <div className="stat">
+                    <div className="stat-title">Total Books Finished</div>
+                    <div className="stat-value">9</div>
+                    <div className="stat-desc">21% more than last month</div>
+                </div>
+
                 <div className="stat">
                     <div className="stat-figure text-secondary">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-8">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
                         </svg>
                     </div>
-                    <div className="stat-title">Unique Authors</div>
+                    <div className="stat-title">Total Authors</div>
                     <div className="stat-value">8</div>
                 </div>
 
@@ -71,6 +83,12 @@ const Home = () => {
                                 Category
                             </th>
                             <th scope="col" class="px-6 py-3">
+                                Started Reading
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Finish Reading
+                            </th>
+                            <th scope="col" class="px-6 py-3">
                                 Status
                             </th>
                         </tr>
@@ -92,6 +110,12 @@ const Home = () => {
                                         Self Improvement
                                     </td>
                                     <td class="px-6 py-4">
+                                        Apr 1, 2025
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        Apr 14, 2025
+                                    </td>
+                                    <td class="px-6 py-4">
                                         <div className="badge badge-soft badge-warning">Reading</div>
                                     </td>
                                 </tr>
@@ -100,7 +124,6 @@ const Home = () => {
                     </tbody>
                 </table>
             </div>
-
         </div>
     )
 }

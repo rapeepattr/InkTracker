@@ -51,7 +51,7 @@ const BookDetail = () => {
                     <div className='mt-3'>
                         <p className='opacity-70'>{book.description}</p>
                     </div>
-                    <div className="mt-6 flex flex-col gap-2">
+                    {/* <div className="mt-6 flex flex-col gap-2">
                         <button
                             className="btn btn-outline btn-warning btn-block font-extrabold"
                         >
@@ -63,7 +63,7 @@ const BookDetail = () => {
                         >
                             Remove Book
                         </button>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>

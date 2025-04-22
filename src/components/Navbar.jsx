@@ -5,7 +5,7 @@ const Navbar = () => {
     return (
         <div className="navbar bg-base-100 shadow-sm">
             <div className="navbar-start">
-                <Link to='/' className="btn btn-ghost text-xl font-extrabold">📚 Bookshelf</Link>
+                <Link to='/' className="btn btn-ghost text-xl font-extrabold">📚 Reading Tracker</Link>
             </div>
             <Link to='/books' className="btn btn-soft btn-secondary font-bold">View Books</Link>
             <div className="navbar-end">
