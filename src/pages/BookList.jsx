@@ -17,16 +17,14 @@ const BookList = () => {
             {books && books.map((book) => {
                 return (
                     <li className="list-row" key={book.id}>
-                        <div><img className="size-10 rounded-box" src="https://img.daisyui.com/images/profile/demo/1@94.webp" /></div>
+                        <div><img className="size-10 rounded-box" src={`https://api.dicebear.com/7.x/initials/svg?seed=${book.title.charAt(0)}`} /></div>
                         <div>
                             <p className='font-bold'>{book.title}</p>
                             <div className="text-xs font-semibold opacity-60">{book.author}</div>
                             <p className="list-col-wrap text-xs mt-5">
                                 {book.description}
                             </p>
-                            <div class="w-[50%] mt-5 bg-gray-200 rounded-full h-1.5 mb-4 dark:bg-gray-700">
-                                <div class="bg-secondary h-1.5 rounded-full dark:bg-blue-500 w-[37.76%]"></div>
-                            </div>
+                            <progress className="progress progress-warning w-100 mt-3" value="70" max="100"></progress>
                         </div>
                         <Link to={`/books/${book.id}`} className="btn btn-square btn-ghost">
                             <svg className="size-[1.2em]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g strokeLinejoin="round" strokeLinecap="round" strokeWidth="2" fill="none" stroke="currentColor"><path d="M6 3L20 12 6 21 6 3z"></path></g></svg>
