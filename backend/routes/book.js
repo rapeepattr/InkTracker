@@ -16,8 +16,8 @@ router.get('/', (req, res) => {
 })
 
 router.post('/', (req, res) => {
-    const sql = `INSERT INTO books (title, author, description) VALUES (?, ?, ?)`
-    const values = [req.body.title, req.body.author, req.body.description]
+    const sql = `INSERT INTO books (title, author, description, pages_total, category) VALUES (?, ?, ?, ?, ?)`
+    const values = [req.body.title, req.body.author, req.body.description, req.body.total_pages, req.body.category]
 
     db.query(sql, values, (err, result) => {
         if (err) {
@@ -28,7 +28,9 @@ router.post('/', (req, res) => {
             id: result.insertId,
             title: req.body.title,
             author: req.body.author,
-            description: req.body.description
+            description: req.body.description,
+            pages_total: req.body.total_pages,
+            category: req.body.category
         })
     })
 })
