@@ -15,6 +15,7 @@ const BookList = () => {
     return (
         <ul className="list bg-base-100 rounded-box shadow-md mx-auto w-[75%]">
             {books && books.map((book) => {
+                let process = (book.pages_read / book.pages_total) * 100
                 return (
                     <li className="list-row" key={book.id}>
                         <div><img className="size-10 rounded-box" src={`https://api.dicebear.com/7.x/initials/svg?seed=${book.title.charAt(0)}`} /></div>
@@ -24,7 +25,7 @@ const BookList = () => {
                             <p className="list-col-wrap text-xs mt-5">
                                 {book.description}
                             </p>
-                            <progress className="progress progress-warning w-100 mt-3" value="70" max="100"></progress>
+                            <progress className="progress progress-warning w-100 mt-3" value={process} max="100"></progress>
                         </div>
                         <Link to={`/books/${book.id}`} className="btn btn-square btn-ghost">
                             <svg className="size-[1.2em]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g strokeLinejoin="round" strokeLinecap="round" strokeWidth="2" fill="none" stroke="currentColor"><path d="M6 3L20 12 6 21 6 3z"></path></g></svg>
