@@ -16,11 +16,11 @@ router.get('/', (req, res) => {
 })
 
 router.post('/', (req, res) => {
-    const sql = `INSERT INTO books (title, author, description, pages_total, category) VALUES (?, ?, ?, ?, ?)`
-    const values = [req.body.title, req.body.author, req.body.description, req.body.total_pages, req.body.category]
+    const sql = `INSERT INTO books (title, author, description, pages_total, pages_read, category, status, is_favourite) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+    const values = [req.body.title, req.body.author, req.body.description, req.body.pages_total, 0, req.body.category, req.body.status, false]
 
     db.query(sql, values, (err, result) => {
-        if (err) {
+    if (err) {
             console.error(err)
             return res.status(500).json({message: 'Database error'})
         }
@@ -29,7 +29,7 @@ router.post('/', (req, res) => {
             title: req.body.title,
             author: req.body.author,
             description: req.body.description,
-            pages_total: req.body.total_pages,
+            pages_total: req.body.pages_total,
             category: req.body.category
         })
     })

@@ -24,8 +24,9 @@ const AddBook = () => {
             title: title,
             author: author,
             description: description,
-            total_pages: totalPages,
-            category: category
+            pages_total: totalPages,
+            category: category,
+            status: "reading"
         }).then(() => {
             setTitle('')
             setAuthor('')
@@ -103,6 +104,7 @@ const AddBook = () => {
                                 <option value="sci-fi">Sci-fi</option>
                                 <option value="fantasy">Fantasy</option>
                                 <option value="biography">Biography</option>
+                                <option value="psychology">Psychology</option>
                                 <option value="self-help">Self-help</option>
                                 <option value="personal-development">Personal-development</option>
                                 <option value="bussiness">Bussiness</option>
@@ -119,7 +121,7 @@ const AddBook = () => {
 
                 <div className="card w-96 bg-base-100 shadow-sm">
                     <div className="card-body">
-                        <span className="badge badge-sm font-bold badge-warning">{category ? category : 'Your category'}</span>
+                        <span className="badge badge-sm font-bold badge-warning capitalize">{category ? category : 'Your category'}</span>
                         <div>
                             <h2 className="text-2xl font-bold">{title ? title : 'Book Title'}</h2>
                             <p className='mt-2 font-semibold'>{author ? author : 'Author name'}</p>

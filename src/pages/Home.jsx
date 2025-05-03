@@ -3,12 +3,85 @@ import React, { useEffect, useState } from 'react'
 
 const Home = () => {
     const [books, setBooks] = useState([])
+
     useEffect(() => {
         axios.get('http://localhost:3000/api/books/')
             .then((res) => {
                 setBooks(res.data)
             })
-    })
+    }, [])
+
+    const getTotalPagesRead = () => {
+        let total = 0 
+        books.map(book => {
+            total += book.pages_read
+        })
+
+        return total
+    }
+
+    const getTopGenres = () => {
+        const genreCount = {}
+
+        books.forEach(book => {
+            const genre = book.category
+            genreCount[genre] = (genreCount[genre] || 0) + 1
+        })
+
+        let topGenre = ''
+        let maxCount = 0
+
+        for (const genre in genreCount) {
+            if (genreCount[genre] > maxCount) {
+                maxCount = genreCount[genre]
+                topGenre = genre
+            }
+        }
+
+        return topGenre
+    }
+
+    const getTotalFinishedBooks = () => {
+        let totalFinished = 0
+        
+        books.map(book => {
+            if (book.status === "success") {
+                totalFinished += 1
+            }
+        })
+
+        return totalFinished
+    }
+
+    const getMostReadAuthor = () => {
+        const authorCount = {}
+
+        books.forEach(book => {
+            const author = book.author
+            authorCount[author] = (authorCount[author] || 0) + 1
+        })
+
+        let topAuthor = ''
+        let maxCount = 0
+
+        for (const author in authorCount) {
+            if (authorCount[author] > maxCount) {
+                maxCount = authorCount[author]
+                topAuthor = author
+            }
+        }
+
+        return topAuthor
+    }
+
+
+    const totalPagesRead = getTotalPagesRead()
+    const topGenre = getTopGenres()
+    const totalFinishedBooks = getTotalFinishedBooks()
+    const mostReadAuthor = getMostReadAuthor()
+
+    const uniqueAuthors = [...new Set(books.map(book => book.author))];
+    
 
     return (
         <div>
@@ -21,30 +94,30 @@ const Home = () => {
                         </svg>
                     </div>
                     <div className="stat-title">Total Page Views</div>
-                    <div className="stat-value">8,251</div>
-                    <div className="stat-desc">21% more than last month</div>
+                    <div className="stat-value">{totalPagesRead}</div>
+                    <div className="stat-desc">-% more than last month</div>
                 </div>
 
                 <div className="stat">
                     <div className="stat-title">Total Books Finished</div>
                     <div className="stat-figure text-secondary">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-7">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-7">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 0 1 3 3h-15a3 3 0 0 1 3-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 0 1-.982-3.172M9.497 14.25a7.454 7.454 0 0 0 .981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 0 0 7.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M7.73 9.728a6.726 6.726 0 0 0 2.748 1.35m8.272-6.842V4.5c0 2.108-.966 3.99-2.48 5.228m2.48-5.492a46.32 46.32 0 0 1 2.916.52 6.003 6.003 0 0 1-5.395 4.972m0 0a6.726 6.726 0 0 1-2.749 1.35m0 0a6.772 6.772 0 0 1-3.044 0" />
                         </svg>
 
                     </div>
-                    <div className="stat-value">9</div>
-                    <div className="stat-desc">21% more than last month</div>
+                    <div className="stat-value">{totalFinishedBooks}</div>
+                    <div className="stat-desc">-% more than last month</div>
                 </div>
 
                 <div className="stat">
                     <div className="stat-figure text-secondary">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-7">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-7">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                         </svg>
                     </div>
                     <div className="stat-title">Average Duration Per Books</div>
-                    <div className="stat-value">4 <span className='text-lg'>Days</span></div>
+                    <div className="stat-value">- <span className='text-lg'>Days</span></div>
                 </div>
 
                 <div className="stat">
@@ -54,7 +127,7 @@ const Home = () => {
                         </svg>
                     </div>
                     <div className="stat-title">Total Authors</div>
-                    <div className="stat-value">8</div>
+                    <div className="stat-value">{uniqueAuthors.length}</div>
                 </div>
 
                 <div className="stat">
@@ -64,7 +137,7 @@ const Home = () => {
                         </svg>
                     </div>
                     <div className="stat-title">Total Books</div>
-                    <div className="stat-value">12</div>
+                    <div className="stat-value">{books.length}</div>
                 </div>
             </div>
 
@@ -81,8 +154,8 @@ const Home = () => {
                 <div className="stat">
                     <div className="stat-title">Top Genres</div>
                     <div className='flex items-center gap-3'>
-                        <div className="stat-value text-lg">
-                            Psychology
+                        <div className="stat-value text-lg capitalize">
+                            {topGenre}
                         </div>
                     </div>
                 </div>
@@ -91,35 +164,35 @@ const Home = () => {
                     <div className="stat-title">Most Read Author</div>
                     <div className='flex items-center gap-3'>
                         <div className="stat-value text-lg">
-                            JK Rowlings
+                            {mostReadAuthor}
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="relative overflow-x-auto mt-5">
-                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <div className="relative overflow-x-auto mt-5">
+                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" className="px-6 py-3">
                                 Number
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" className="px-6 py-3">
                                 Book title
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" className="px-6 py-3">
                                 Author
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" className="px-6 py-3">
                                 Category
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" className="px-6 py-3">
                                 Started Reading
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" className="px-6 py-3">
                                 Finish Reading
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" className="px-6 py-3">
                                 Status
                             </th>
                         </tr>
@@ -127,27 +200,27 @@ const Home = () => {
                     <tbody>
                         {books.map((book, index) => {
                             return (
-                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200" key={book.id}>
-                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200" key={book.id}>
+                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         {index + 1}
                                     </th>
-                                    <td class="px-6 py-4">
+                                    <td className="px-6 py-4">
                                         {book.title}
                                     </td>
-                                    <td class="px-6 py-4">
+                                    <td className="px-6 py-4">
                                         {book.author}
                                     </td>
-                                    <td class="px-6 py-4">
-                                        Self Improvement
+                                    <td className="px-6 py-4 capitalize">
+                                        {book.category}
                                     </td>
-                                    <td class="px-6 py-4">
+                                    <td className="px-6 py-4">
                                         Apr 1, 2025
                                     </td>
-                                    <td class="px-6 py-4">
+                                    <td className="px-6 py-4">
                                         Apr 14, 2025
                                     </td>
-                                    <td class="px-6 py-4">
-                                        <div className="badge badge-soft badge-warning font-semibold">Reading</div>
+                                    <td className="px-6 py-4">
+                                        <div className={`badge badge-soft font-semibold capitalize ${book.status === "success" ? 'badge-success' : 'badge-warning'}`}>{book.status}</div>
                                     </td>
                                 </tr>
                             )
