@@ -7,7 +7,9 @@ const BookDetail = () => {
     const { id } = useParams()
     const [book, setBook] = useState(null)
     const [pagesRead, setPagesRead] = useState(0)
+    const [process, setProcess] = useState(0)
     const [page, setPage] = useState(0)
+    const [pagesRemain, setPagesRemain] = useState(0)
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -16,6 +18,8 @@ const BookDetail = () => {
                 setBook(res.data[0])
                 setPage(res.data[0].pages_read)
                 setPagesRead(res.data[0].pages_read)
+                setProcess(((res.data[0].pages_read / res.data[0].pages_total) * 100).toFixed(2))
+                setPagesRemain(res.data[0].pages_total - res.data[0].pages_read)
             })
             .catch(err => console.error(err))
     }, [id])
@@ -29,7 +33,11 @@ const BookDetail = () => {
     const handleSave = () => {
         axios.put(`http://localhost:3000/api/books/${id}`, {
             pages_read: page
-        }).then(() => setPagesRead(page))
+        }).then(() => {
+            setPagesRead(page)
+            setProcess(((page / book.pages_total) * 100).toFixed(2))
+            setPagesRemain(book.pages_total - page)
+        })
     }
 
     if (!book) return <div className="text-center mt-10">Loading...</div>
@@ -49,9 +57,9 @@ const BookDetail = () => {
                         </div>
 
                         <div className="stat">
-                            <div className="stat-value">{((book.pages_read / book.pages_total) * 100).toFixed(2)} %</div>
+                            <div className="stat-value">{process} %</div>
                             <div className="stat-title">Reads done</div>
-                            <div className="stat-desc text-secondary">{book.pages_total - book.pages_read} pages remaining</div>
+                            <div className="stat-desc text-secondary">{pagesRemain} pages remaining</div>
                         </div>
                     </div>
 
