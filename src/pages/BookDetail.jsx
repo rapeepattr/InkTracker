@@ -7,7 +7,7 @@ const BookDetail = () => {
     const { id } = useParams()
     const [book, setBook] = useState(null)
     const [pagesRead, setPagesRead] = useState(0)
-    const [process, setProcess] = useState(0)
+    const [progress, setProgress] = useState(0)
     const [page, setPage] = useState(0)
     const [pagesRemain, setPagesRemain] = useState(0)
     const navigate = useNavigate()
@@ -18,7 +18,7 @@ const BookDetail = () => {
                 setBook(res.data[0])
                 setPage(res.data[0].pages_read)
                 setPagesRead(res.data[0].pages_read)
-                setProcess(((res.data[0].pages_read / res.data[0].pages_total) * 100).toFixed(2))
+                setProgress(((res.data[0].pages_read / res.data[0].pages_total) * 100).toFixed(2))
                 setPagesRemain(res.data[0].pages_total - res.data[0].pages_read)
             })
             .catch(err => console.error(err))
@@ -27,7 +27,7 @@ const BookDetail = () => {
     const handleRemove = (id) => {
         console.log(id)
         axios.delete(`http://localhost:3000/api/books/${id}`)
-            .then(navigate('/books'))
+            .then(() => navigate('/books'))
     }
 
     const handleSave = () => {
@@ -35,7 +35,7 @@ const BookDetail = () => {
             pages_read: page
         }).then(() => {
             setPagesRead(page)
-            setProcess(((page / book.pages_total) * 100).toFixed(2))
+            setProgress(((page / book.pages_total) * 100).toFixed(2))
             setPagesRemain(book.pages_total - page)
         })
     }
@@ -57,7 +57,7 @@ const BookDetail = () => {
                         </div>
 
                         <div className="stat">
-                            <div className="stat-value">{process} %</div>
+                            <div className="stat-value">{progress} %</div>
                             <div className="stat-title">Reads done</div>
                             <div className="stat-desc text-secondary">{pagesRemain} pages remaining</div>
                         </div>
@@ -73,10 +73,13 @@ const BookDetail = () => {
                                 </div>
                             </div>
                             <div className='flex gap-3'>
-                                <div className="stat-value">How to become a billionaire in a week</div>
+                                <div className="stat-value">{book.title}</div>
                             </div>
-                            <div className="stat-desc">James Clear</div>
-                            <div className="stat-desc mt-[2rem]">A practical guide to building good habits and breaking bad ones.</div>
+                            <div className="stat-desc">{book.author}</div>
+                            <div className="stat-desc mt-[2rem] whitespace-pre-line break-words min-w-md">
+                                {book.description}
+                            </div>
+
                             <div className='mt-5 flex gap-2'>
                                 <button className="btn btn-circle btn-soft btn-warning">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.8" stroke="currentColor" className="size-6">
@@ -108,13 +111,13 @@ const BookDetail = () => {
                             </div>
                             <button
                                 className="btn btn-circle btn-success text-white text-lg btn-sm font-bold"
-                                onClick={() => setPage((prev) => prev + 1)}
+                                onClick={() => setPage((prev) => Math.min(prev + 1, book.pages_total))}
                             >
                                 +
                             </button>
                         </div>
 
-                        <progress className="progress progress-warning w-56" value="70" max="100"></progress>
+                        <progress className="progress progress-warning w-56" value={progress} max="100"></progress>
                         <button
                             className="btn btn-soft btn-warning mt-4 font-semibold"
                             onClick={() => handleSave()}
