@@ -48,21 +48,38 @@ router.get('/:id', (req, res) => {
 })
 
 router.put('/:id', (req, res) => {
-    const sql = `UPDATE books SET title=?, author=?, description=? WHERE id=?`
-    const values = [req.body.title, req.body.author, req.body.description, req.params.id]
+    const fields = [];
+    const values = [];
+
+    if (req.body.title !== undefined) {
+        fields.push('title = ?');
+        values.push(req.body.title);
+    }
+    if (req.body.author !== undefined) {
+        fields.push('author = ?');
+        values.push(req.body.author);
+    }
+    if (req.body.description !== undefined) {
+        fields.push('description = ?');
+        values.push(req.body.description);
+    }
+    if (req.body.pages_read !== undefined) {
+        fields.push('pages_read = ?');
+        values.push(req.body.pages_read);
+    }
+
+    const sql = `UPDATE books SET ${fields.join(', ')} WHERE id = ?`;
+    values.push(req.params.id);
 
     db.query(sql, values, (err) => {
         if (err) {
-            console.error(err)
-            return res.status(500).json({message: 'Database error'})
+            console.error(err);
+            return res.status(500).json({ message: 'Database error' });
         }
-        res.json({
-            title: req.body.title,
-            author: req.body.author,
-            description: req.body.description
-        })
-    })
-})
+        res.json({ message: 'Book updated successfully' });
+    });
+});
+
 
 router.delete('/:id', (req, res) => {
     const sql = `DELETE FROM books WHERE id=${req.params.id}`
