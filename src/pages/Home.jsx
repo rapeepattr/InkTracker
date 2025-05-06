@@ -3,26 +3,44 @@ import React, { useEffect, useState } from 'react'
 
 const Home = () => {
     const [books, setBooks] = useState([])
+    const [error, setError] = useState(null)
 
     useEffect(() => {
-        axios.get('http://localhost:3000/api/books/')
+        const token = localStorage.getItem('token') // ดึง token จาก localStorage
+
+        if (!token) {
+            setError('Token is missing. Please log in again.')
+            return
+        }
+
+        axios.get('http://localhost:3000/api/books/', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
             .then((res) => {
                 setBooks(res.data)
+                console.log(res.data)
+            })
+            .catch((err) => {
+                if (err.response && err.response.status === 401) {
+                    setError('Unauthorized access. Please log in again.')
+                } else {
+                    setError('An error occurred. Please try again later.')
+                }
             })
     }, [])
 
     const getTotalPagesRead = () => {
-        let total = 0 
-        books.map(book => {
+        let total = 0
+        books.forEach(book => {
             total += book.pages_read
         })
-
         return total
     }
 
     const getTopGenres = () => {
         const genreCount = {}
-
         books.forEach(book => {
             const genre = book.category
             genreCount[genre] = (genreCount[genre] || 0) + 1
@@ -43,19 +61,16 @@ const Home = () => {
 
     const getTotalFinishedBooks = () => {
         let totalFinished = 0
-        
-        books.map(book => {
+        books.forEach(book => {
             if (book.status === "success") {
                 totalFinished += 1
             }
         })
-
         return totalFinished
     }
 
     const getMostReadAuthor = () => {
         const authorCount = {}
-
         books.forEach(book => {
             const author = book.author
             authorCount[author] = (authorCount[author] || 0) + 1
@@ -74,14 +89,12 @@ const Home = () => {
         return topAuthor
     }
 
-
     const totalPagesRead = getTotalPagesRead()
     const topGenre = getTopGenres()
     const totalFinishedBooks = getTotalFinishedBooks()
     const mostReadAuthor = getMostReadAuthor()
 
     const uniqueAuthors = [...new Set(books.map(book => book.author))];
-    
 
     return (
         <div>
@@ -150,7 +163,7 @@ const Home = () => {
                         </div>
                     </div>
                 </div>
-         
+
                 <div className="stat">
                     <div className="stat-title">Top Genres</div>
                     <div className='flex items-center gap-3'>
@@ -174,57 +187,31 @@ const Home = () => {
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
-                            <th scope="col" className="px-6 py-3">
-                                Number
-                            </th>
-                            <th scope="col" className="px-6 py-3">
-                                Book title
-                            </th>
-                            <th scope="col" className="px-6 py-3">
-                                Author
-                            </th>
-                            <th scope="col" className="px-6 py-3">
-                                Category
-                            </th>
-                            <th scope="col" className="px-6 py-3">
-                                Started Reading
-                            </th>
-                            <th scope="col" className="px-6 py-3">
-                                Finish Reading
-                            </th>
-                            <th scope="col" className="px-6 py-3">
-                                Status
-                            </th>
+                            <th scope="col" className="px-6 py-3">Number</th>
+                            <th scope="col" className="px-6 py-3">Book title</th>
+                            <th scope="col" className="px-6 py-3">Author</th>
+                            <th scope="col" className="px-6 py-3">Category</th>
+                            <th scope="col" className="px-6 py-3">Started Reading</th>
+                            <th scope="col" className="px-6 py-3">Finish Reading</th>
+                            <th scope="col" className="px-6 py-3">Status</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {books.map((book, index) => {
-                            return (
-                                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200" key={book.id}>
-                                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        {index + 1}
-                                    </th>
-                                    <td className="px-6 py-4">
-                                        {book.title}
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        {book.author}
-                                    </td>
-                                    <td className="px-6 py-4 capitalize">
-                                        {book.category}
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        Apr 1, 2025
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        Apr 14, 2025
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        <div className={`badge badge-soft font-semibold capitalize ${book.status === "success" ? 'badge-success' : 'badge-warning'}`}>{book.status}</div>
-                                    </td>
-                                </tr>
-                            )
-                        })}
+                        {books.map((book, index) => (
+                            <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200" key={book.id}>
+                                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{index + 1}</th>
+                                <td className="px-6 py-4">{book.title}</td>
+                                <td className="px-6 py-4">{book.author}</td>
+                                <td className="px-6 py-4 capitalize">{book.category}</td>
+                                <td className="px-6 py-4">Apr 1, 2025</td>
+                                <td className="px-6 py-4">Apr 14, 2025</td>
+                                <td className="px-6 py-4">
+                                    <div className={`badge badge-soft font-semibold capitalize ${book.status === "success" ? 'badge-success' : 'badge-warning'}`}>
+                                        {book.status}
+                                    </div>
+                                </td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
             </div>

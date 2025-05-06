@@ -7,15 +7,28 @@ const BookList = () => {
     const [books, setBooks] = useState([])
 
     useEffect(() => {
-        axios.get('http://localhost:3000/api/books/')
-            .then(res => setBooks(res.data))
-            .catch(err => console.error(err))
+        const token = localStorage.getItem('token')
+
+        axios.get('http://localhost:3000/api/books/', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+            .then(res => {
+                setBooks(res.data)
+                console.log(res.data)
+            })
+            .catch(err => {
+                console.error(err)
+            })
     }, [])
+
 
     return (
         <ul className="list bg-base-100 rounded-box shadow-md mx-auto w-[75%]">
             {books && books.map((book) => {
                 let process = (book.pages_read / book.pages_total) * 100
+
                 return (
                     <li className="list-row" key={book.id}>
                         <div><img className="size-10 rounded-box" src={`https://api.dicebear.com/7.x/initials/svg?seed=${book.title.charAt(0)}`} /></div>

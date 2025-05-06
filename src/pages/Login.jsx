@@ -2,9 +2,11 @@ import axios from 'axios';
 import React, { useState } from 'react'
 import { Link } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/authContext'
 
 const Login = () => {
     const navigate = useNavigate()
+    const { login } = useAuth()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [message, setMessage] = useState('')
@@ -13,7 +15,8 @@ const Login = () => {
         e.preventDefault()
         try {
             const res = await axios.post('http://localhost:3000/api/auth/login', { email, password })
-            localStorage.setItem('token', res.data.token)
+            const token = res.data.token
+            login(token)
             navigate('/')
         } catch (error) {
             setMessage(error.response?.data?.message || 'Incorrect email or password')

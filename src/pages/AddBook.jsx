@@ -14,28 +14,53 @@ const AddBook = () => {
         setToast({ message, type })
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (!title || !author || !description) {
             showToast({ message: 'Please fill in all fields before submitting', type: 'error' })
             return
         }
 
-        axios.post('http://localhost:3000/api/books/', {
-            title: title,
-            author: author,
-            description: description,
-            pages_total: totalPages,
-            category: category,
-            status: "reading"
-        }).then(() => {
+        try {
+            const token = localStorage.getItem('token')
+            if (!token) {
+                showToast({ message: 'No authentication token, please login', type: 'error' })
+                return
+            }
+
+            const response = await axios.post(
+                'http://localhost:3000/api/books/',
+                {
+                    title,
+                    author,
+                    description,
+                    pages_total: totalPages,
+                    category,
+                    status: "reading"
+                },
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    }
+                }
+            )
+
+            if (response.status === 201) {
+                showToast({ message: 'Book added successfully!' })
+            } else {
+                showToast({ message: 'Failed to add book.', type: 'error' })
+            }
+            
             setTitle('')
             setAuthor('')
             setDescription('')
-            setCategory(''),
+            setCategory('')
             setTotalPages(0)
+
             showToast({ message: 'Add book successfully' })
-        })
-            .catch(() => showToast({ message: 'Something went wrong', type: 'error' }))
+        } catch (error) {
+            console.error(error)
+            showToast({ message: 'Something went wrong', type: 'error' })
+        }
     }
 
     return (

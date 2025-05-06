@@ -1,12 +1,14 @@
 import express from 'express'
 import db from '../db.js'
+import { verifyToken } from '../middleware/verifyToken.js'
 
 const router = express.Router()
 
-router.get('/', (req, res) => {
-    const sql = 'SELECT * FROM books'
+router.get('/', verifyToken, (req, res) => {
+    const userId = req.user.id
+    const sql = 'SELECT * FROM books WHERE user_id = ?'
 
-    db.query(sql, (err, result) => {
+    db.query(sql, [userId], (err, result) => {
         if (err) {
             console.error(err)
             return res.status(500).json({ message: 'Database error' })
@@ -15,25 +17,48 @@ router.get('/', (req, res) => {
     })
 })
 
-router.post('/', (req, res) => {
-    const sql = `INSERT INTO books (title, author, description, pages_total, pages_read, category, status, is_favourite) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
-    const values = [req.body.title, req.body.author, req.body.description, req.body.pages_total, 0, req.body.category, req.body.status, false]
+router.post('/', verifyToken, (req, res) => {
+    const userId = req.user.id
+
+    const sql = `
+        INSERT INTO books 
+        (user_id, title, author, description, pages_total, pages_read, category, status, is_favourite) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `
+
+    const values = [
+        userId,
+        req.body.title,
+        req.body.author,
+        req.body.description,
+        req.body.pages_total,
+        0,                   
+        req.body.category,
+        req.body.status,
+        false  
+    ]
 
     db.query(sql, values, (err, result) => {
-    if (err) {
+        if (err) {
             console.error(err)
-            return res.status(500).json({message: 'Database error'})
+            return res.status(500).json({ message: 'Database error' })
         }
+
         res.json({
             id: result.insertId,
+            user_id: userId,
             title: req.body.title,
             author: req.body.author,
             description: req.body.description,
             pages_total: req.body.pages_total,
-            category: req.body.category
+            pages_read: 0,
+            category: req.body.category,
+            status: req.body.status,
+            is_favourite: false
         })
     })
 })
+
 
 router.get('/:id', (req, res) => {
     const sql = `SELECT * FROM books WHERE id=${req.params.id}`
@@ -79,7 +104,6 @@ router.put('/:id', (req, res) => {
         res.json({ message: 'Book updated successfully' });
     });
 });
-
 
 router.delete('/:id', (req, res) => {
     const sql = `DELETE FROM books WHERE id=${req.params.id}`
