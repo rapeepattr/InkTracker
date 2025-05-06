@@ -6,7 +6,7 @@ const Home = () => {
     const [error, setError] = useState(null)
 
     useEffect(() => {
-        const token = localStorage.getItem('token') // ดึง token จาก localStorage
+        const token = localStorage.getItem('token') 
 
         if (!token) {
             setError('Token is missing. Please log in again.')
@@ -108,7 +108,6 @@ const Home = () => {
                     </div>
                     <div className="stat-title">Total Page Views</div>
                     <div className="stat-value">{totalPagesRead}</div>
-                    <div className="stat-desc">-% more than last month</div>
                 </div>
 
                 <div className="stat">
@@ -120,7 +119,6 @@ const Home = () => {
 
                     </div>
                     <div className="stat-value">{totalFinishedBooks}</div>
-                    <div className="stat-desc">-% more than last month</div>
                 </div>
 
                 <div className="stat">
