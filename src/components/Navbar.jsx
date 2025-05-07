@@ -29,7 +29,7 @@ const Navbar = () => {
                     <>
                         <div className="avatar avatar-online avatar-placeholder">
                             <div className="bg-neutral text-neutral-content w-8 rounded-full">
-                                <span className="text-md font-black">{userEmail[0]}</span>
+                                <span className="text-md font-black uppercase">{userEmail[0]}</span>
                             </div>
                         </div>
                         <div>

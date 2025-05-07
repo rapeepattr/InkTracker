@@ -25,7 +25,24 @@ const BookList = () => {
 
 
     return (
-        <ul className="list bg-base-100 rounded-box shadow-md mx-auto w-[75%]">
+        <ul className="list bg-base-100 rounded-box mx-auto w-[75%]">
+            {books.length === 0 && (
+                <section className="bg-white dark:bg-gray-900">
+                    <div className="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
+                        <div className="mx-auto max-w-screen-sm text-center">
+                            <h2 className="mb-4 text-5xl tracking-tight font-extrabold text-primary-600 dark:text-primary-500">No Books Yet</h2>
+                            <p className="mb-4 text-xl font-semibold text-gray-900 dark:text-white">
+                                Your library is empty.
+                            </p>
+                            <p className="mb-6 text-lg font-light text-gray-500 dark:text-gray-400">
+                                Start adding books to build your personal reading list.
+                            </p>
+                            <Link to='/add' className="btn btn-soft btn-info font-bold">+ Add Book</Link>
+                        </div>
+                    </div>
+                </section>
+
+            )}
             {books && books.map((book) => {
                 let process = (book.pages_read / book.pages_total) * 100
 
