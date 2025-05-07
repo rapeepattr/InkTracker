@@ -31,14 +31,25 @@ const BookDetail = () => {
     }
 
     const handleSave = () => {
+        const updatedStatus = page === book.pages_total ? "success" : "reading"
+        const token = localStorage.getItem('token')
+
         axios.put(`http://localhost:3000/api/books/${id}`, {
-            pages_read: page
-        }).then(() => {
-            setPagesRead(page)
-            setProgress(((page / book.pages_total) * 100).toFixed(2))
-            setPagesRemain(book.pages_total - page)
+            pages_read: page,
+            status: updatedStatus
+        }, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
         })
+            .then(() => {
+                setPagesRead(page)
+                setProgress(((page / book.pages_total) * 100).toFixed(2))
+                setPagesRemain(book.pages_total - page)
+            })
+            .catch(err => console.error(err))
     }
+
 
     if (!book) return <div className="text-center mt-10">Loading...</div>
     return (
@@ -130,29 +141,6 @@ const BookDetail = () => {
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div className="overflow-x-auto mt-8">
-                <table className="table table-xs">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>Action</th>
-                            <th>Pages read</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th>1</th>
-                            <td>24 Apr 2025</td>
-                            <td>12:10 AM</td>
-                            <td>Add reads</td>
-                            <td>16</td>
-                        </tr>
-                    </tbody>
-                </table>
             </div>
         </div>
     )
