@@ -11,16 +11,16 @@ import Register from './pages/Register'
 import Ranking from './pages/Ranking'
 
 const AppRoutes = () => {
-    const { user } = useContext(AuthContext)
+    const { isLoggedIn } = useContext(AuthContext)
 
     return (
         <Routes>
-            <Route path="/" element={user ? <Home /> : <Navigate to="/login" />} />
-            <Route path="/add" element={user ? <AddBook /> : <Navigate to="/login" />} />
-            <Route path="/edit/:id" element={user ? <EditBook /> : <Navigate to="/login" />} />
-            <Route path="/books" element={user ? <BookList /> : <Navigate to="/login" />} />
-            <Route path="/books/:id" element={user ? <BookDetail /> : <Navigate to="/login" />} />
-            <Route path="/ranking" element={user ? <Ranking /> : <Navigate to="/login" />} />
+            <Route path="/" element={isLoggedIn ? <Home /> : <Navigate to="/login" />} />
+            <Route path="/add" element={isLoggedIn ? <AddBook /> : <Navigate to="/login" />} />
+            <Route path="/edit/:id" element={isLoggedIn ? <EditBook /> : <Navigate to="/login" />} />
+            <Route path="/books" element={isLoggedIn ? <BookList /> : <Navigate to="/login" />} />
+            <Route path="/books/:id" element={isLoggedIn ? <BookDetail /> : <Navigate to="/login" />} />
+            <Route path="/ranking" element={isLoggedIn ? <Ranking /> : <Navigate to="/login" />} />
 
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
