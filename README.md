@@ -3,6 +3,28 @@
 
 This is a full-featured web application for tracking personal reading progress. It includes complete CRUD functionality, user registration and login with JWT-based authentication, and real-time integration with a MySQL database via API.
 
+## 🧱 Tech Stack
+
+**Frontend:**
+- React
+- Vite
+- Tailwind CSS
+- DaisyUI
+- Axios
+
+**Backend:**
+- Node.js
+- Express.js
+
+**Authentication:**
+- JSON Web Token (JWT)
+
+**Database:**
+- MySQL
+
+**Others:**
+- RESTful API
+- Nodemon (for development)
 
 ## API Reference
 
