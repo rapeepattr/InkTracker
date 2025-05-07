@@ -117,7 +117,7 @@ const BookDetail = () => {
                             </div>
                             <button
                                 className="btn btn-circle btn-success text-white text-lg btn-sm font-bold"
-                                onClick={() => setPage((prev) => Math.min(prev + 15, book.pages_total))}
+                                onClick={() => setPage((prev) => Math.min(prev + 1, book.pages_total))}
                             >
                                 +
                             </button>

@@ -43,7 +43,7 @@ const Navbar = () => {
                             </div>
                         </div>
                         <div>
-                            <p className='font-bold'>{userEmail.split('@')[0]}</p>
+                            <p className='font-bold capitalize'>{userEmail.split('@')[0]}</p>
                             <p className='text-xs text-gray-500'>{userEmail}</p>
                         </div>
                         <button onClick={handleLogout} className="btn btn-outline btn-error font-bold">Logout</button>

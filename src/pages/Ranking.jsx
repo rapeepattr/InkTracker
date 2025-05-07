@@ -38,7 +38,7 @@ const Ranking = () => {
                                 </td>
                                 <td>
                                     <div>
-                                        <p className='font-bold'>{rank.email.split('@')[0]}</p>
+                                        <p className='font-bold capitalize'>{rank.email.split('@')[0]}</p>
                                         <p className='text-xs text-gray-500'>{rank.email}</p>
                                     </div>
                                 </td>
