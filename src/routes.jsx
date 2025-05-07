@@ -7,6 +7,7 @@ import BookDetail from './pages/BookDetail'
 import BookList from './pages/BookList'
 import Login from './pages/Login'
 import Register from './pages/Register'
+import Ranking from './pages/Ranking'
 
 const AppRoutes = () => {
     return (
@@ -15,6 +16,7 @@ const AppRoutes = () => {
             <Route path="/add" element={<AddBook />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/ranking" element={<Ranking />} />
             <Route path="/edit/:id" element={<EditBook />} />
             <Route path='/books' element={<BookList />} />
             <Route path="/books/:id" element={<BookDetail />}></Route>
